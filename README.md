@@ -173,7 +173,7 @@ adb install -r releases/padosipro.apk
 2. Copy the 6-digit code from Mailpit → Verify  
 3. Fill profile (Business name optional) → Save  
 4. Pick tasks (search / multi-select) → Confirm  
-5. Home lists selected tasks → Edit / Sign out  
+5. Home lists selected tasks → **Edit tasks** (bottom) or open **Settings** (gear) to sign out / change server  
 6. Restart the app — you stay logged in  
 
 ---
@@ -182,12 +182,22 @@ adb install -r releases/padosipro.apk
 
 See [DESIGN.md](DESIGN.md) for architecture, trade-offs, and what we’d do with another week.
 
+More detail:
+
+| Doc | What |
+|-----|------|
+| [docs/README.md](docs/README.md) | Docs index |
+| [docs/architecture.md](docs/architecture.md) | System layout + onboarding steps |
+| [docs/DECISIONS.md](docs/DECISIONS.md) | Why we chose X over Y |
+| [CURSOR.txt](CURSOR.txt) / [CLAUDE.txt](CLAUDE.txt) | Notes for AI coding assistants |
+
 ---
 
 ## Assumptions (called out for the brief)
 
 - **Business name** is optional — most customers are households; business tracks still benefit when filled.  
-- Users can **edit tasks** from Home after onboarding.  
+- Users can **edit tasks** from Home (or Settings) after onboarding.  
+- **Sign out** is under Settings (gear on Home), not on the main home surface.  
 - Password: ≥8 chars, at least one letter and one number.  
 - Re-registering an unverified email **resends OTP** (does not overwrite the password).  
 - Android APK alone is the binary deliverable (iOS needs a paid Apple account).

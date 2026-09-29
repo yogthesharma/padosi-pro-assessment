@@ -1,37 +1,41 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, spacing, typography } from '@/theme';
+import { FadeIn } from '@/components/FadeIn';
+import { colors, radius, spacing, typography } from '@/theme';
 
 export function BrandHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <View style={styles.container}>
+    <FadeIn style={styles.container}>
       <View style={styles.brandRow}>
-        <View style={styles.logo}>
+        <LinearGradient colors={[colors.primary, colors.heroWash]} style={styles.logo}>
           <Text style={styles.logoText}>P</Text>
+        </LinearGradient>
+        <View>
+          <Text style={styles.brand}>PadosiPro</Text>
+          <Text style={styles.tagline}>Lifestyle Manager</Text>
         </View>
-        <Text style={styles.brand}>PadosiPro</Text>
       </View>
       <Text style={styles.title} accessibilityRole="header">
         {title}
       </Text>
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-    </View>
+    </FadeIn>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { marginBottom: spacing.xl, marginTop: spacing.md },
-  brandRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xl },
+  container: { marginBottom: spacing.xl, marginTop: spacing.sm },
+  brandRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xl, gap: spacing.md },
   logo: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
+    width: 44,
+    height: 44,
+    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: spacing.sm,
   },
-  logoText: { color: colors.accent, fontSize: 20, fontWeight: '800' },
+  logoText: { color: colors.accent, fontSize: 22, fontWeight: '800' },
   brand: { fontSize: 20, fontWeight: '800', color: colors.primary, letterSpacing: 0.2 },
+  tagline: { ...typography.caption, marginTop: 1 },
   title: { ...typography.title, marginBottom: spacing.sm },
   subtitle: typography.bodyMuted,
 });

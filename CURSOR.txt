@@ -1,0 +1,51 @@
+PadosiPro assessment — guidance for Cursor (and similar agents)
+
+What this repo is
+-----------------
+Take-home onboarding app: register → OTP → login → profile → task pick → home.
+Monorepo: apps/api (Fastify + Postgres), apps/mobile (Expo), packages/shared (Zod/types).
+
+Do not break
+------------
+- Working product first. Prefer small, reversible edits.
+- Do not call production PadosiPro APIs or scrape their site for code/assets.
+- Never commit real secrets. Use .env.example / apps/api/.env.example only.
+- Keep OTP rules intact: 6 digits, HMAC hash only, 10 min TTL, single use,
+  max 5 attempts, ~30s resend cooldown (see apps/api OTP module + tests).
+- Keep shared Zod schemas as the single source of validation for API + mobile.
+- Mobile screens must stay native (no WebView of app.padosipro.com).
+
+Where to look
+-------------
+- Run stack: docker compose up --build -d  (API :4000, Mailpit :8025)
+- Docs index: docs/README.md
+- Architecture: docs/architecture.md
+- Decision log: docs/DECISIONS.md
+- Design one-pager: DESIGN.md
+- Reviewer runbook: README.md
+- Turborepo agent note: AGENTS.md (managed block — leave it)
+
+Mobile UX conventions (current)
+-------------------------------
+- Primary actions live in Screen footers / thumb zone.
+- Sign out lives in Settings (not on Home). Home has settings gear + Edit tasks.
+- Prefer existing components: Button, Screen, FadeIn, PressableScale,
+  IconButton, ListRow, BrandHeader, StateViews.
+- Theme tokens: apps/mobile/src/theme/index.ts (PadosiPro greens/gold).
+
+Commands
+--------
+  npm install
+  docker compose up --build -d
+  npm test
+  npm run typecheck
+  npm run dev:mobile
+
+APK
+---
+See README section "Build the Android APK". Deliverable copy: releases/padosipro.apk
+
+When unsure
+-----------
+Ask before inventing new product flows. Prefer matching existing patterns in
+apps/api/src and apps/mobile/src.

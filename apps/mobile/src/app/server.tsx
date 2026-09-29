@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons';
 import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useState } from 'react';
@@ -6,10 +7,12 @@ import { errorMessage } from '@/api/client';
 import { api } from '@/api/endpoints';
 import { Banner } from '@/components/Banner';
 import { Button } from '@/components/Button';
+import { FadeIn } from '@/components/FadeIn';
+import { IconButton } from '@/components/IconButton';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { DEFAULT_API_URL, getApiUrl, normaliseApiUrl, saveApiUrl } from '@/config/api-url';
-import { spacing, typography } from '@/theme';
+import { colors, radius, spacing, typography } from '@/theme';
 
 /** Lets one APK talk to an emulator host (10.0.2.2) or a laptop on the same Wi-Fi. */
 export default function ServerSettingsScreen() {
@@ -30,40 +33,82 @@ export default function ServerSettingsScreen() {
   };
 
   return (
-    <Screen>
-      <Text style={styles.title}>Server settings</Text>
-      <Text style={styles.subtitle}>
-        Point the app at the PadosiPro API. On the Android emulator the default {DEFAULT_API_URL} reaches your computer. On a
-        real phone, use your computer's Wi-Fi address, e.g. http://192.168.1.20:4000.
-      </Text>
+    <Screen
+      footer={
+        <View style={styles.footer}>
+          <Button title="Save" icon="check" onPress={() => void onSave()} />
+          <Button title="Cancel" variant="ghost" onPress={close} />
+        </View>
+      }
+    >
+      <FadeIn>
+        <View style={styles.topBar}>
+          <IconButton icon="x" label="Close" onPress={close} />
+          <Text style={styles.screenTitle}>Server</Text>
+          <View style={{ width: 40 }} />
+        </View>
+      </FadeIn>
 
-      <TextField
-        label="API address"
-        value={url}
-        onChangeText={(value) => {
-          setUrl(value);
-          setResult(null);
-        }}
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="url"
-        placeholder="http://10.0.2.2:4000"
-      />
+      <FadeIn delay={60}>
+        <View style={styles.iconHero}>
+          <Feather name="server" size={28} color={colors.primary} />
+        </View>
+        <Text style={styles.subtitle}>
+          Point the app at the PadosiPro API. On the Android emulator the default {DEFAULT_API_URL} reaches your computer. On a
+          real phone, use your computer's Wi-Fi address, e.g. http://192.168.1.20:4000.
+        </Text>
+      </FadeIn>
 
-      {result ? <Banner tone={result.ok ? 'success' : 'error'} message={result.message} /> : null}
+      <FadeIn delay={100}>
+        <TextField
+          label="API address"
+          value={url}
+          onChangeText={(value) => {
+            setUrl(value);
+            setResult(null);
+          }}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="url"
+          placeholder="http://10.0.2.2:4000"
+        />
 
-      <View style={styles.actions}>
-        <Button title="Test connection" variant="secondary" icon="activity" onPress={() => test.mutate(url)} loading={test.isPending} />
-        <Button title="Save" onPress={() => void onSave()} />
-        <Button title="Reset to default" variant="ghost" onPress={() => setUrl(DEFAULT_API_URL)} />
-        <Button title="Cancel" variant="ghost" onPress={close} />
-      </View>
+        {result ? <Banner tone={result.ok ? 'success' : 'error'} message={result.message} /> : null}
+
+        <View style={styles.actions}>
+          <Button
+            title="Test connection"
+            variant="secondary"
+            icon="activity"
+            onPress={() => test.mutate(url)}
+            loading={test.isPending}
+          />
+          <Button title="Reset to default" variant="ghost" icon="rotate-ccw" onPress={() => setUrl(DEFAULT_API_URL)} />
+        </View>
+      </FadeIn>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  title: { ...typography.title, marginTop: spacing.md, marginBottom: spacing.sm },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.lg,
+    marginTop: spacing.sm,
+  },
+  screenTitle: { ...typography.heading },
+  iconHero: {
+    width: 56,
+    height: 56,
+    borderRadius: radius.lg,
+    backgroundColor: colors.primaryMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.lg,
+  },
   subtitle: { ...typography.bodyMuted, marginBottom: spacing.xl },
-  actions: { gap: spacing.sm },
+  actions: { gap: spacing.sm, marginTop: spacing.sm },
+  footer: { gap: spacing.sm },
 });

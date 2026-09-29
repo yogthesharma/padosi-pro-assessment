@@ -3,6 +3,7 @@ export const colors = {
   primary: '#155C49',
   primaryPressed: '#133E35',
   primaryMuted: '#E8F8F3',
+  primarySoft: '#4CC4A2',
   accent: '#C9A84C',
   accentMuted: '#FDF6E3',
   background: '#FAFAF7',
@@ -19,6 +20,7 @@ export const colors = {
   success: '#027A48',
   successMuted: '#ECFDF3',
   white: '#FFFFFF',
+  heroWash: '#133E35',
 } as const;
 
 export const spacing = {
@@ -28,16 +30,19 @@ export const spacing = {
   lg: 16,
   xl: 24,
   xxl: 32,
+  xxxl: 40,
 } as const;
 
 export const radius = {
   sm: 8,
   md: 12,
   lg: 16,
+  xl: 20,
   pill: 999,
 } as const;
 
 export const typography = {
+  display: { fontSize: 30, lineHeight: 36, fontWeight: '700' as const, color: colors.text },
   title: { fontSize: 26, lineHeight: 32, fontWeight: '700' as const, color: colors.text },
   heading: { fontSize: 18, lineHeight: 24, fontWeight: '700' as const, color: colors.text },
   body: { fontSize: 15, lineHeight: 22, color: colors.text },
@@ -45,3 +50,26 @@ export const typography = {
   label: { fontSize: 14, lineHeight: 20, fontWeight: '600' as const, color: colors.textSubtle },
   caption: { fontSize: 13, lineHeight: 18, color: colors.textMuted },
 };
+
+export const shadow = {
+  soft: {
+    shadowColor: '#101828',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  card: {
+    shadowColor: '#101828',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+} as const;
+
+export const motion = {
+  pressScale: 0.97,
+  fadeMs: 380,
+  spring: { friction: 7, tension: 140 },
+} as const;

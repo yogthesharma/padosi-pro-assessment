@@ -52,8 +52,13 @@ export function ConfirmSheet({ visible, categories, selected, saving, error, onC
         </ScrollView>
 
         {error ? <Banner message={error} /> : null}
-        <Button title={`Confirm ${selected.size} task${selected.size === 1 ? '' : 's'}`} onPress={onConfirm} loading={saving} />
-        <Button title="Keep editing" variant="ghost" onPress={onClose} disabled={saving} style={{ marginTop: spacing.xs }} />
+        <Button
+          title={`Confirm ${selected.size} task${selected.size === 1 ? '' : 's'}`}
+          icon="check"
+          onPress={onConfirm}
+          loading={saving}
+        />
+        <Button title="Keep editing" variant="ghost" icon="edit-2" onPress={onClose} disabled={saving} style={{ marginTop: spacing.xs }} />
       </View>
     </Modal>
   );

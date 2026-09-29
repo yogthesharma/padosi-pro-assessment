@@ -3,17 +3,19 @@ import { profileSchema, type ProfileInput } from '@padosipro/shared';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { errorMessage } from '@/api/client';
 import { api } from '@/api/endpoints';
 import { Banner } from '@/components/Banner';
 import { BrandHeader } from '@/components/BrandHeader';
 import { Button } from '@/components/Button';
+import { FadeIn } from '@/components/FadeIn';
 import { FormTextField } from '@/components/FormTextField';
 import { Screen } from '@/components/Screen';
+import { TextLink } from '@/components/TextLink';
 import { applyServerFieldErrors } from '@/lib/form-errors';
 import { useSession } from '@/session/SessionProvider';
-import { spacing } from '@/theme';
+import { colors, spacing, typography } from '@/theme';
 
 const FIELDS = ['name', 'mobile', 'address', 'businessName'] as const;
 
@@ -47,60 +49,79 @@ export default function ProfileScreen() {
 
   return (
     <Screen
-      footer={<Button title="Save and continue" onPress={() => void onSubmit()} loading={save.isPending} />}
+      footer={
+        <Button title="Save and continue" icon="arrow-right" onPress={() => void onSubmit()} loading={save.isPending} />
+      }
     >
       <BrandHeader
         title="Tell us a little more"
         subtitle="So your Lifestyle Manager can coordinate visits and deliveries smoothly."
       />
 
-      {banner ? <Banner message={banner} /> : null}
+      {banner ? (
+        <FadeIn>
+          <Banner message={banner} />
+        </FadeIn>
+      ) : null}
 
-      <FormTextField
-        control={control}
-        name="name"
-        label="Full name"
-        placeholder="e.g. Asha Rao"
-        autoCapitalize="words"
-        autoComplete="name"
-        textContentType="name"
-      />
-      <FormTextField
-        control={control}
-        name="mobile"
-        label="Mobile number"
-        placeholder="98765 43210"
-        prefix="+91"
-        keyboardType="phone-pad"
-        autoComplete="tel"
-        textContentType="telephoneNumber"
-        maxLength={16}
-        hint="10-digit Indian mobile number"
-      />
-      <FormTextField
-        control={control}
-        name="address"
-        label="Address"
-        placeholder="Flat / house no., street, area, city, PIN"
-        multiline
-        autoComplete="street-address"
-        textContentType="fullStreetAddress"
-      />
-      <FormTextField
-        control={control}
-        name="businessName"
-        label="Business name"
-        optional
-        placeholder="Only if you run a business"
-        autoCapitalize="words"
-        hint="Leave blank if this is for your household."
-      />
+      <FadeIn delay={60}>
+        <FormTextField
+          control={control}
+          name="name"
+          label="Full name"
+          placeholder="e.g. Asha Rao"
+          autoCapitalize="words"
+          autoComplete="name"
+          textContentType="name"
+        />
+        <FormTextField
+          control={control}
+          name="mobile"
+          label="Mobile number"
+          placeholder="98765 43210"
+          prefix="+91"
+          keyboardType="phone-pad"
+          autoComplete="tel"
+          textContentType="telephoneNumber"
+          maxLength={16}
+          hint="10-digit Indian mobile number"
+        />
+        <FormTextField
+          control={control}
+          name="address"
+          label="Address"
+          placeholder="Flat / house no., street, area, city, PIN"
+          multiline
+          autoComplete="street-address"
+          textContentType="fullStreetAddress"
+        />
+        <FormTextField
+          control={control}
+          name="businessName"
+          label="Business name"
+          optional
+          placeholder="Only if you run a business"
+          autoCapitalize="words"
+          hint="Leave blank if this is for your household."
+        />
+      </FadeIn>
 
-      <Button title="Log out" variant="ghost" icon="log-out" onPress={() => void signOut()} style={styles.logout} />
+      <FadeIn delay={140} style={styles.signOutWrap}>
+        <Text style={styles.signOutHint}>Wrong account?</Text>
+        <TextLink action="Sign out" onPress={() => void signOut()} />
+      </FadeIn>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  logout: { marginTop: spacing.sm, alignSelf: 'center' },
+  signOutWrap: {
+    marginTop: spacing.xl,
+    paddingTop: spacing.lg,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  signOutHint: typography.caption,
 });

@@ -3,11 +3,13 @@ import type { TaskCategory } from '@padosipro/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
+import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { errorMessage } from '@/api/client';
 import { api, queryKeys } from '@/api/endpoints';
 import { BrandHeader } from '@/components/BrandHeader';
 import { Button } from '@/components/Button';
+import { FadeIn } from '@/components/FadeIn';
+import { IconButton } from '@/components/IconButton';
 import { Screen } from '@/components/Screen';
 import { EmptyView, ErrorView, LoadingView } from '@/components/StateViews';
 import { ConfirmSheet } from '@/features/tasks/ConfirmSheet';
@@ -16,7 +18,7 @@ import { SearchBar } from '@/features/tasks/SearchBar';
 import { TaskCard } from '@/features/tasks/TaskCard';
 import { featherIcon } from '@/lib/icons';
 import { useSession } from '@/session/SessionProvider';
-import { colors, spacing, typography } from '@/theme';
+import { colors, radius, shadow, spacing, typography } from '@/theme';
 
 /**
  * Used twice: as the last onboarding step, and from Home to edit the selection.
@@ -85,19 +87,24 @@ export default function TasksScreen() {
   );
 
   const header = (
-    <View>
+    <FadeIn>
       {editing ? (
-        <Pressable onPress={() => router.back()} style={styles.back} accessibilityRole="button" hitSlop={10}>
-          <Feather name="arrow-left" size={20} color={colors.text} />
-          <Text style={styles.backText}>Back</Text>
-        </Pressable>
+        <View style={styles.topBar}>
+          <IconButton icon="arrow-left" label="Back" onPress={() => router.back()} />
+        </View>
       ) : null}
       <BrandHeader
         title={editing ? 'Edit your tasks' : 'What should we handle?'}
         subtitle="Pick any that apply. You can change this whenever."
       />
       <SearchBar value={search} onChange={setSearch} />
-    </View>
+      {selected.size > 0 ? (
+        <View style={styles.selectedChip}>
+          <Feather name="check-circle" size={14} color={colors.primary} />
+          <Text style={styles.selectedChipText}>{selected.size} selected</Text>
+        </View>
+      ) : null}
+    </FadeIn>
   );
 
   if (catalogue.isPending || (editing && current.isPending)) {
@@ -130,11 +137,18 @@ export default function TasksScreen() {
       scroll={false}
       footer={
         <View style={styles.footer}>
-          <Text style={styles.count} accessibilityLiveRegion="polite">
-            {selected.size === 0 ? 'Pick at least one' : `${selected.size} selected`}
-          </Text>
+          <View style={styles.countBlock}>
+            <Feather
+              name={selected.size === 0 ? 'circle' : 'check-circle'}
+              size={18}
+              color={selected.size === 0 ? colors.textMuted : colors.success}
+            />
+            <Text style={styles.count} accessibilityLiveRegion="polite">
+              {selected.size === 0 ? 'Pick at least one' : `${selected.size} selected`}
+            </Text>
+          </View>
           <Button
-            title="Continue"
+            title={editing ? 'Save changes' : 'Continue'}
             icon="arrow-right"
             onPress={() => {
               setSaveError(null);
@@ -171,7 +185,7 @@ export default function TasksScreen() {
               icon="search"
               title="No matching services"
               message={`Nothing matches “${search}”. Try another word, or tell your Lifestyle Manager in your own words later.`}
-              action={<Button title="Clear search" variant="secondary" onPress={() => setSearch('')} />}
+              action={<Button title="Clear search" variant="secondary" icon="x" onPress={() => setSearch('')} />}
             />
           ) : (
             <EmptyView icon="inbox" title="No services yet" message="The catalogue is empty right now. Please check back soon." />
@@ -194,20 +208,33 @@ export default function TasksScreen() {
 
 const styles = StyleSheet.create({
   list: { padding: spacing.xl, paddingBottom: spacing.xxl, width: '100%', maxWidth: 560, alignSelf: 'center' },
-  back: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.sm },
-  backText: { ...typography.body, fontWeight: '600' },
+  topBar: { marginBottom: spacing.sm, marginTop: spacing.sm },
+  selectedChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: spacing.xs,
+    backgroundColor: colors.primaryMuted,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radius.pill,
+    marginBottom: spacing.md,
+  },
+  selectedChipText: { ...typography.caption, color: colors.primary, fontWeight: '700' },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.xl, marginBottom: spacing.md },
   sectionIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 12,
     backgroundColor: colors.primaryMuted,
     alignItems: 'center',
     justifyContent: 'center',
+    ...shadow.card,
   },
   sectionTitle: typography.heading,
   sectionSubtitle: typography.caption,
   footer: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
-  count: { ...typography.label, flex: 1 },
+  countBlock: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  count: { ...typography.label, flexShrink: 1 },
   continue: { minWidth: 150 },
 });

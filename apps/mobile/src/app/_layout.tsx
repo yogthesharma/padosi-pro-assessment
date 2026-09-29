@@ -89,6 +89,7 @@ function RootNavigator() {
 
       <Stack.Protected guard={signedIn && step === 'home'}>
         <Stack.Screen name="home" />
+        <Stack.Screen name="settings" options={{ animation: 'slide_from_right' }} />
       </Stack.Protected>
 
       <Stack.Protected guard={signedIn && step !== 'profile'}>

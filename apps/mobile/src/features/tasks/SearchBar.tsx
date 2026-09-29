@@ -33,9 +33,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     paddingHorizontal: spacing.md,
-    minHeight: 46,
+    minHeight: 48,
+    marginBottom: spacing.md,
   },
   input: { flex: 1, fontSize: 16, color: colors.text, paddingVertical: spacing.sm },
 });

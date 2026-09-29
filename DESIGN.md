@@ -22,7 +22,7 @@ packages/shared  →  Zod schemas + ErrorCode + wire types (both apps)
 
 **Backend.** Thin routes → services → repositories. OTP policy (TTL, attempts, cooldown, hourly cap) lives in pure functions with a injectable clock — that’s what the tests hammer without a database. Postgres repositories match the same interfaces as the in-memory ones used in Vitest.
 
-**Mobile.** Expo Router + `Stack.Protected` guards driven by `GET /api/me`’s `onboardingStep` (`profile` | `tasks` | `home`). The server decides the next screen, so a reinstall can’t skip profile or tasks. Token in SecureStore (AsyncStorage on web). TanStack Query for catalogue/tasks; react-hook-form + shared Zod for forms.
+**Mobile.** Expo Router + `Stack.Protected` guards driven by `GET /api/me`’s `onboardingStep` (`profile` | `tasks` | `home`). The server decides the next screen, so a reinstall can’t skip profile or tasks. Token in SecureStore (AsyncStorage on web). TanStack Query for catalogue/tasks; react-hook-form + shared Zod for forms. After onboarding, **Sign out** lives under Settings; Home stays task-focused with a thumb-zone Edit CTA.
 
 ## Main trade-offs
 

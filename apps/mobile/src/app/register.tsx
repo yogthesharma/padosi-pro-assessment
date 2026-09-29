@@ -10,12 +10,14 @@ import { api } from '@/api/endpoints';
 import { Banner } from '@/components/Banner';
 import { BrandHeader } from '@/components/BrandHeader';
 import { Button } from '@/components/Button';
+import { FadeIn } from '@/components/FadeIn';
 import { FormTextField } from '@/components/FormTextField';
+import { IconButton } from '@/components/IconButton';
 import { Screen } from '@/components/Screen';
 import { TextLink } from '@/components/TextLink';
 import { passwordRules, registerFormSchema } from '@/features/auth/schemas';
 import { applyServerFieldErrors } from '@/lib/form-errors';
-import { colors, spacing, typography } from '@/theme';
+import { colors, radius, spacing, typography } from '@/theme';
 
 export default function RegisterScreen() {
   const [banner, setBanner] = useState<string | null>(null);
@@ -45,7 +47,17 @@ export default function RegisterScreen() {
   });
 
   return (
-    <Screen>
+    <Screen
+      footer={<Button title="Create account" icon="arrow-right" onPress={() => void onSubmit()} loading={register.isPending} />}
+    >
+      <View style={styles.topBar}>
+        <IconButton
+          icon="arrow-left"
+          label="Back"
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/login'))}
+        />
+      </View>
+
       <BrandHeader
         title="Create your account"
         subtitle="Tell us what your household needs and your Lifestyle Manager gets it done."
@@ -53,51 +65,52 @@ export default function RegisterScreen() {
 
       {banner ? <Banner message={banner} /> : null}
 
-      <FormTextField
-        control={control}
-        name="email"
-        label="Email"
-        placeholder="you@example.com"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoComplete="email"
-        textContentType="emailAddress"
-      />
-      <FormTextField
-        control={control}
-        name="password"
-        label="Password"
-        placeholder="Create a password"
-        secureToggle
-        autoCapitalize="none"
-        autoComplete="new-password"
-        textContentType="newPassword"
-      />
-      <View style={styles.rules} accessibilityLabel="Password requirements">
-        {passwordRules.map((rule) => {
-          const met = rule.test(password);
-          return (
-            <View key={rule.label} style={styles.rule}>
-              <Feather name={met ? 'check-circle' : 'circle'} size={14} color={met ? colors.success : colors.textMuted} />
-              <Text style={[styles.ruleText, met && styles.ruleMet]}>{rule.label}</Text>
-            </View>
-          );
-        })}
-      </View>
-      <FormTextField
-        control={control}
-        name="confirmPassword"
-        label="Confirm password"
-        placeholder="Type it again"
-        secureToggle
-        autoCapitalize="none"
-        autoComplete="new-password"
-        textContentType="newPassword"
-        returnKeyType="go"
-        onSubmitEditing={() => void onSubmit()}
-      />
+      <FadeIn delay={60}>
+        <FormTextField
+          control={control}
+          name="email"
+          label="Email"
+          placeholder="you@example.com"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          textContentType="emailAddress"
+        />
+        <FormTextField
+          control={control}
+          name="password"
+          label="Password"
+          placeholder="Create a password"
+          secureToggle
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+        />
+        <View style={styles.rules} accessibilityLabel="Password requirements">
+          {passwordRules.map((rule) => {
+            const met = rule.test(password);
+            return (
+              <View key={rule.label} style={[styles.rule, met && styles.ruleOn]}>
+                <Feather name={met ? 'check' : 'circle'} size={12} color={met ? colors.success : colors.textMuted} />
+                <Text style={[styles.ruleText, met && styles.ruleMet]}>{rule.label}</Text>
+              </View>
+            );
+          })}
+        </View>
+        <FormTextField
+          control={control}
+          name="confirmPassword"
+          label="Confirm password"
+          placeholder="Type it again"
+          secureToggle
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+          returnKeyType="go"
+          onSubmitEditing={() => void onSubmit()}
+        />
+      </FadeIn>
 
-      <Button title="Create account" onPress={() => void onSubmit()} loading={register.isPending} style={styles.submit} />
       <TextLink
         prompt="Already have an account?"
         action="Log in"
@@ -108,9 +121,18 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  rules: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, marginTop: -spacing.sm, marginBottom: spacing.lg },
-  rule: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  topBar: { marginBottom: spacing.sm },
+  rules: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: -spacing.sm, marginBottom: spacing.lg },
+  rule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.surfaceMuted,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radius.pill,
+  },
+  ruleOn: { backgroundColor: colors.successMuted },
   ruleText: typography.caption,
-  ruleMet: { color: colors.success },
-  submit: { marginTop: spacing.sm },
+  ruleMet: { color: colors.success, fontWeight: '600' },
 });

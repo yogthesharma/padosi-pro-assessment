@@ -1,0 +1,45 @@
+PadosiPro assessment — guidance for Claude (and similar agents)
+
+Project
+-------
+Full-stack take-home for PadosiPro Lifestyle Manager onboarding.
+Stack: Turborepo + npm workspaces, Fastify API, Expo Router mobile, Postgres,
+Mailpit for OTP email, packages/shared for Zod schemas and error codes.
+
+Hard constraints
+----------------
+1. Preserve end-to-end flow: register → verify → login → profile → tasks → home.
+2. Do not weaken security (bcrypt passwords, HMAC OTP, JWT + token_version logout).
+3. Do not add WebViews of the live site; keep native screens.
+4. Do not invent production deploy; local Docker Compose is the intended runtime.
+5. Do not commit secrets or personal data — test data only.
+6. Prefer editing existing modules over new frameworks or rewrites.
+
+Key paths
+---------
+  apps/api/src/           Fastify server, routes, services, OTP, auth
+  apps/api/tests/         OTP + auth + HTTP tests (must keep passing)
+  apps/mobile/src/app/    Expo Router screens
+  apps/mobile/src/components/  Shared UI primitives
+  packages/shared/        Zod + API types (change carefully; both sides depend)
+  docs/                   Extra documentation (architecture, decisions)
+  DESIGN.md               One-page architecture / trade-offs
+  README.md               How a reviewer runs everything in <15 minutes
+
+Verification before finishing a change
+--------------------------------------
+  npm test
+  npm run typecheck --workspace=@padosipro/mobile
+  (optional) curl http://localhost:4000/health
+
+Documentation
+-------------
+  docs/README.md          Index
+  docs/architecture.md    System layout
+  docs/DECISIONS.md       Why we chose X over Y
+  CURSOR.txt              Cursor-oriented notes (same spirit as this file)
+
+Style
+-----
+Match existing naming, error shape { error: { code, message, fields?, details? } },
+and mobile theme colours. Keep PRs/commits focused; explain the "why" in messages.
