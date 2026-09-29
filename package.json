@@ -1,0 +1,26 @@
+{
+  "name": "padosipro",
+  "private": true,
+  "description": "PadosiPro onboarding: Fastify API + Expo mobile app, in one Turborepo.",
+  "packageManager": "npm@12.1.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:api": "turbo run dev --filter=@padosipro/api",
+    "dev:mobile": "turbo run dev --filter=@padosipro/mobile",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "stack:up": "docker compose up --build -d",
+    "stack:down": "docker compose down"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.5"
+  }
+}

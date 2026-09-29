@@ -1,0 +1,38 @@
+{
+  "name": "@padosipro/api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PadosiPro onboarding API: registration, email OTP, login, profile and task selection.",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/helmet": "^13.1.1",
+    "@fastify/rate-limit": "^11.2.0",
+    "@padosipro/shared": "*",
+    "bcryptjs": "^3.0.3",
+    "fastify": "^5.12.5",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.0.12",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@padosipro/typescript-config": "*",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.6.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
+  }
+}
