@@ -9,6 +9,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+  LOG_PRETTY: booleanString,
 
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
 
@@ -38,6 +39,7 @@ export interface AppConfig {
   env: Env['NODE_ENV'];
   port: number;
   logLevel: Env['LOG_LEVEL'];
+  logPretty: boolean;
   databaseUrl: string;
   auth: {
     jwtSecret: string;
@@ -77,6 +79,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     env: env.NODE_ENV,
     port: env.PORT,
     logLevel: env.LOG_LEVEL,
+    logPretty: env.LOG_PRETTY,
     databaseUrl: env.DATABASE_URL,
     auth: {
       jwtSecret: env.JWT_SECRET,

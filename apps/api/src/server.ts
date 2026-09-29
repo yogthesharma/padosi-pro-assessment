@@ -40,6 +40,16 @@ async function main() {
     logger: {
       level: config.logLevel,
       redact: ['req.headers.authorization', 'req.body.password', 'req.body.code'],
+      transport: config.logPretty
+        ? {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+              translateTime: 'HH:MM:ss',
+              ignore: 'pid,hostname',
+            },
+          }
+        : undefined,
     },
   });
 
